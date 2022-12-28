@@ -1,4 +1,4 @@
-# Автор: Коссе Иван
+# Коссе Иван
 
 ## Задание 2.3.2 Тестирование:
 
@@ -11,12 +11,12 @@
 ![](Screenshots/unittest.png)
 
 ## Задание 2.3.3 Профилирование:
-
+### Без многопроцессорной обработки
 - При печати вакансий
 
 ![](Screenshots/vacanciesProfile.png)
 
-- При генерации отчёта
+- При генерации отчёта (Здесь профилирование было с файлом vacancies_medium)
 
 ![](Screenshots/statisticsProfile.png)
 
@@ -33,3 +33,7 @@
 Функция formatterDataRe (переименована)
 
 ![](Screenshots/reProfile.png)
+
+## Задание 3.2.1 Разделить данные
+
+![](Screenshots/separateFiles.png)
