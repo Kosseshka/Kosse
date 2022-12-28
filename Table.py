@@ -63,6 +63,43 @@ class Vacancy:
         self.published_at = datetime.datetime.strptime(vacancy["Дата публикации вакансии"], "%Y-%m-%dT%H:%M:%S%z")
         self.str_skills = Vacancy.croppingСharacters(vacancy["Навыки"].replace('&&&&', '\n'), 100)
 
+    # def formatterDataDatetime(data: str):
+    #     """Преобразует дату и время с помощью библиотеки datetime. Самый быстрый вариант, занял 0.007 sec
+    #
+    #     Args:
+    #         data (str): строка с датой в формате Y-m-dTH:M:S+z
+    #
+    #     Returns:
+    #         datetime: дата в формате %Y-%m-%dT%H:%M:%S%z
+    #     """
+    #     return datetime.datetime.strptime(data, "%Y-%m-%dT%H:%M:%S%z")
+
+    # def formatterDataStr(data: str):
+    #     """Преобразует дату в строку. Не самый быстрый вариант, занял 0.019 sec
+    #
+    #     Args:
+    #         data (str): строка с датой в формате Y-m-dTH:M:S+z
+    #
+    #     Returns:
+    #         str: дата в формате {d}.{m}.{y}
+    #     """
+    #     d = data[:4]
+    #     m = data[5:7]
+    #     y = data[8:10]
+    #     return f'{d}.{m}.{y}'
+
+    # def formatterDataRe(data : str):
+    #     """Преобразует дату в строку. Не самый быстрый вариант, занял 0.018 sec
+    #
+    #     Args:
+    #         data (str): строка с датой в формате Y-m-dTH:M:S+z
+    #
+    #     Returns:
+    #         str: дата в формате {d}.{m}.{y}
+    #     """
+    #     yyyy, mm, dd, h, m, ss, *_ = re.split(r'[T:.-]', data)
+    #     return f'{dd}/{mm}/{yyyy}'
+
     def croppingСharacters(message: str, maxLen: int):
         """Отвечает за то, чтобы строка была не более заданной длины.
         Args:
@@ -293,14 +330,17 @@ currency_to_rub = {"Манаты": 35.68,
                    "Доллары": 60.66,
                    "Узбекский сум": 0.0055
                    }
+
 dictTranslationExperience = {"noExperience": "Нет опыта",
                              "between1And3": "От 1 года до 3 лет",
                              "between3And6": "От 3 до 6 лет",
                              "moreThan6": "Более 6 лет"}
+
 dictSortionExperience = {"Нет опыта": 1,
                          "От 1 года до 3 лет": 2,
                          "От 3 до 6 лет": 3,
                          "Более 6 лет": 4}
+
 dictTranslationСurrency = {"AZN": "Манаты",
                            "BYR": "Белорусские рубли",
                            "EUR": "Евро",
@@ -311,12 +351,14 @@ dictTranslationСurrency = {"AZN": "Манаты",
                            "UAH": "Гривны",
                            "USD": "Доллары",
                            "UZS": "Узбекский сум"}
+
 dictTranslationBool = {"True": "Да",
                        "False": "Нет",
                        "Да": True,
                        "Нет": False,
                        "FALSE": "Нет",
                        "TRUE": "Да"}
+
 dictTranslationTaxes = {"False": "С вычетом налогов",
                         "True": "Без вычета налогов",
                         "FALSE": "С вычетом налогов",

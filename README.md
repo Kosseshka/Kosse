@@ -4,8 +4,32 @@
 
 - Отчёт о тестировании на doctest
 
-![](Screenshots/doctest.PNG)
+![](Screenshots/doctest.png)
 
 - Отчёт о тестировании на unittest
 
-![](Screenshots/unittest.PNG)
+![](Screenshots/unittest.png)
+
+## Задание 2.3.3 Профилирование:
+
+- При печати вакансий
+
+![](Screenshots/vacanciesProfile.png)
+
+- При генерации отчёта
+
+![](Screenshots/statisticsProfile.png)
+
+- При форматировании даты: 
+
+Функция formatterDataDatetime
+
+![](Screenshots/datetimeProfile.png)
+
+Функция formatterDataStr
+
+![](Screenshots/strProfile.png)
+
+Функция formatterDataRe (переименована)
+
+![](Screenshots/reProfile.png)
