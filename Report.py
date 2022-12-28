@@ -78,7 +78,6 @@ class Statistics:
         print('Динамика количества вакансий по годам для выбранной профессии:', selectedNumberVacancies)
         print('Уровень зарплат по городам (в порядке убывания):', salaryCity)
         print('Доля вакансий по городам (в порядке убывания):', vacanciesCity)
-
         return {'salaryYear': salaryYear, 'numberVacancies': numberVacancies,
                 'selectedSalaryYear': selectedSalaryYear, 'selectedNumberVacancies': selectedNumberVacancies,
                 'salaryCity': salaryCity, 'vacanciesCity': vacanciesCity,
@@ -99,10 +98,10 @@ class Report:
         """
         self.nameProfession = nameProfession
 
-    def generate_excel(self, dataList: list):
+    def generate_excel(self, dataList: dict):
         """Генерирует Excel-файл (таблицу) со статистикой
         Args:
-            dataList (list): Список с данными о собранной статистике
+            dataList (dict): Данные о собранной статистике
         """
         vacanciesBook = Workbook()
         statisticsYear = vacanciesBook.active
@@ -113,19 +112,15 @@ class Report:
         statisticsCity = vacanciesBook.create_sheet("Статистика по городам")
         statisticsCity.append(['Город', 'Уровень зарплат', '', 'Город', 'Доля вакансий'])
         column = ['A', 'B', 'C', 'D', 'E']
-
         for year in dataList['years']:
             statisticsYear.append(
                 [year, dataList['salaryYear'][year], dataList['selectedSalaryYear'][year],
                  dataList['numberVacancies'][year], dataList['selectedNumberVacancies'][year]])
-
         for key, value in dataList['salaryCity'].items():
             statisticsCity.append({'A': key, 'B': value})
         for key, value in dataList['vacanciesCity'].items():
             statisticsCity.append({'D': key, 'E': "{:.2f}%".format(float(value * 100))})
-
         statisticsCity.move_range('D12:E21', rows=-10)
-
         self.styleSetting(statisticsYear, statisticsCity, column)
         vacanciesBook.save('report.xlsx')
 
@@ -142,7 +137,6 @@ class Report:
                          right=Side(border_style='thin', color='00000000'),
                          top=Side(border_style='thin', color='00000000'),
                          bottom=Side(border_style='thin', color='00000000'))
-
         for row in statisticsYear.rows:
             for cell in row:
                 if cell.value:
@@ -151,15 +145,12 @@ class Report:
             for cell in row:
                 if cell.value:
                     cell.border = borders
-
         for i in column:
             statisticsYear[f'{i}1'].font, statisticsCity[f'{i}1'].font = ft, ft
         for i in range(2, 12):
             statisticsCity[f'E{i}'].alignment = Alignment(horizontal='right')
-
         self.editWidthColumn(statisticsYear)
         self.editWidthColumn(statisticsCity)
-
         statisticsCity.column_dimensions['C'].width = 2
 
     def editWidthColumn(self, sheet):
@@ -176,10 +167,10 @@ class Report:
         for col, value in colsDict.items():
             sheet.column_dimensions[col].width = value + 2
 
-    def generate_image(self, dataList: list):
+    def generate_image(self, dataList: dict):
         """Генерирует изображение со статистическими графиками
         Args:
-            dataList (list): Список с данными о собранной статистике
+            dataList (dict): Данные о собранной статистике
         """
         x = np.arange(min(dataList['years']), max(dataList['years']) + 1) - 0.25
 
@@ -192,7 +183,6 @@ class Report:
         plt.grid(axis='y')
         plt.xticks(dataList['years'], rotation=90, horizontalalignment='center')
         plt.legend([salaryYear, selectedSalaryYear], ['средняя з/п', f'з/п {self.nameProfession}'])
-
         plt.subplot(2, 2, 2)
         plt.title('Количество вакансий по годам')
         plt.xticks(dataList['years'], rotation=90, horizontalalignment='center')
@@ -201,7 +191,6 @@ class Report:
         selectedNumberVacancies = plt.bar(x + width, dataList['selectedNumberVacancies'].values(), width)
         plt.legend([numberVacancies, selectedNumberVacancies],
                    ['Количество вакансий', f'Количество вакансий \n {self.nameProfession}'])
-
         plt.subplot(2, 2, 3)
         plt.title('Уровень зарплат по городам')
         salaryCityIndex = [key.replace(" ", "\n").replace("-", "-\n") for key in dataList['salaryCity'].keys()]
@@ -209,7 +198,6 @@ class Report:
         plt.yticks(horizontalalignment='right', verticalalignment="center", fontsize=6)
         plt.gca().invert_yaxis()
         plt.barh(salaryCityIndex, salaryCityValues)
-
         plt.subplot(2, 2, 4)
         plt.title('Доля вакансий по городам')
         others = 1 - sum(dataList['vacanciesCity'].values())
@@ -218,18 +206,16 @@ class Report:
         labels = dataList['vacanciesCity'].keys() if others == 0 else ['Другие'] + list(
             dataList['vacanciesCity'].keys())
         plt.pie(vacanciesCity, labels=labels, textprops={"fontsize": 6})
-
         plt.tight_layout()
         plt.savefig('graph.png', dpi=300)
 
-    def generate_pdf(self, dataList: list):
-        """Генерирует pfd-отчёт
+    def generate_pdf(self, dataList: dict):
+        """Генерирует pdf-отчёт
         Args:
-            dataList (list): Список с данными о собранной статистике
+            dataList (dict): Данные о собранной статистике
         """
         env = Environment(loader=FileSystemLoader('.'))
         template = env.get_template("pdf_template.html")
-
         pdf_template = template.render(
             {'nameProfessonal': self.nameProfession, 'image_file': 'graph.png', 'dataList': dataList})
         config = pdfkit.configuration(wkhtmltopdf=r'C:\wkhtmltox\bin\wkhtmltopdf.exe')

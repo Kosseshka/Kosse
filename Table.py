@@ -1,6 +1,7 @@
 import re
 import prettytable
 import datetime
+import doctest
 
 
 class Salary:
@@ -52,7 +53,7 @@ class Vacancy:
             vacancy (dict): Вакансия
         """
         self.name = vacancy['Название']
-        self.description = self.croppingСharacters(vacancy["Описание"], 100)
+        self.description = Vacancy.croppingСharacters(vacancy["Описание"], 100)
         self.key_skills = re.split("\n", vacancy["Навыки"].replace('&&&&', '\n'))
         self.experience_id = dictTranslationExperience[vacancy["Опыт работы"]]
         self.premium = dictTranslationBool[vacancy["Премиум-вакансия"]]
@@ -60,15 +61,23 @@ class Vacancy:
         self.salary = Salary(vacancy)
         self.area_name = vacancy['Название региона']
         self.published_at = datetime.datetime.strptime(vacancy["Дата публикации вакансии"], "%Y-%m-%dT%H:%M:%S%z")
-        self.str_skills = self.croppingСharacters(vacancy["Навыки"].replace('&&&&', '\n'), 100)
+        self.str_skills = Vacancy.croppingСharacters(vacancy["Навыки"].replace('&&&&', '\n'), 100)
 
-    def croppingСharacters(self, message: str, maxLen: int):
+    def croppingСharacters(message: str, maxLen: int):
         """Отвечает за то, чтобы строка была не более заданной длины.
         Args:
             message (str): Строка, которую необходимо проверить (при необходимости - обрезать)
             maxLen (int): Максимальная длина строки
         Returns:
             message (str): Обработанная строка
+        >>> Vacancy.croppingСharacters('Это абсурд, враньё: череп, скелет, коса.', 20)
+        'Это абсурд, враньё: ...'
+        >>> Vacancy.croppingСharacters('Простишь ли мне ревнивые мечты...', 40)
+        'Простишь ли мне ревнивые мечты...'
+        >>> Vacancy.croppingСharacters('«Он сошел вниз, избегая подолгу смотреть на нее, как на солнце, но он видел ее, как солнце, и не глядя» [Цитата из романа Льва Толстого «Анна Каренина».]', 100)
+        '«Он сошел вниз, избегая подолгу смотреть на нее, как на солнце, но он видел ее, как солнце, и не гля...'
+        >>> Vacancy.croppingСharacters('предпочитаю думать ни о чем', 0)
+        '...'
         """
         if len(message) >= maxLen:
             return message[:maxLen] + "..."
@@ -179,12 +188,11 @@ class Table:
             return vacancies_list.sort(key=lambda vacancy: dictSortionExperience[vacancy.experience_id],
                                        reverse=self.isReverseSort)
         if self.parameterSort == "Оклад":
-            return vacancies_list.sort(
-                key=lambda vacancy: vacancy.convertsToRub(), reverse=self.isReverseSort)
+            return vacancies_list.sort(key=lambda vacancy: vacancy.convertsToRub(), reverse=self.isReverseSort)
         return vacancies_list.sort(key=lambda vacancy: vacancy.returnsValues(self.parameterSort),
                                    reverse=self.isReverseSort)
 
-    def formattingBorders(self, s: list, vacancies: list):
+    def formattingBorders(s: list, vacancies: list):
         """Форматирует границы таблицы по длине
 
         Args:
@@ -192,6 +200,14 @@ class Table:
             vacancies (list): Список вакансий
         Returns:
             int, int: Границы таблицы
+        >>> Table.formattingBorders([10, 20], [ 1, 2, 3, 4, 5])
+        (9, 19)
+        >>> Table.formattingBorders([1], [ 2, 9, "fff"])
+        (0, 3)
+        >>> Table.formattingBorders([1, 50], [ 2, [9, 7], "fff"])
+        (0, 49)
+        >>> Table.formattingBorders([1], [2])
+        (0, 1)
         """
         if len(s) == 0:
             return 0, len(vacancies)
@@ -226,7 +242,7 @@ class Table:
         self.vacanciesTable.hrules = prettytable.ALL
         self.vacanciesTable.header = True
         counter = 1
-        startingNumberVacancy, finalNumberVacancy = self.formattingBorders(self.borders, data_vacancies)
+        startingNumberVacancy, finalNumberVacancy = Table.formattingBorders(self.borders, data_vacancies)
         for vacancy in data_vacancies:
             rows = [counter, vacancy.name, vacancy.description, vacancy.str_skills, vacancy.experience_id,
                     vacancy.premium, vacancy.employer_name,
