@@ -37,3 +37,7 @@
 ## Задание 3.2.1 Разделить данные
 
 ![](Screenshots/separateFiles.png)
+
+## Задание 3.2.3 Concurrent futures
+
+![](Screenshots/multiProfile.png)

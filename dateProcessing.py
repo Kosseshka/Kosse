@@ -1,5 +1,6 @@
 from Table import Table, Vacancy
 from Report import Statistics, Report
+from MultiprocessingByYear import MultiprocessingByYear
 import csv
 import os
 import sys
@@ -19,7 +20,6 @@ class InputConnect:
         """Инициализирует объект InputConnect"""
         outputSelection = input("Вакансии или Статистика: ")
         self.file = DataSet()
-
         if outputSelection == "Вакансии":
             self.table = Table()
             if self.table.checkingParameterValues():
@@ -33,9 +33,11 @@ class InputConnect:
                     self.table.print_vacancies(vacancies)
                 else:
                     print("Нет данных")
+
         if outputSelection == "Статистика":
             self.statistics = Statistics()
-            self.file.parserCSVforReport(self.statistics)
+            asynchrony = MultiprocessingByYear(self.statistics)
+            asynchrony.asynchronousProcessing()
             vacancies = self.statistics.print_vacancies()
             report = Report(self.statistics.nameProfession)
             report.generate_excel(vacancies)
@@ -55,7 +57,7 @@ class DataSet:
 
     def __init__(self):
         """Инициализирует объект DataSet"""
-        self.file_name = input("Введите название файла: ")
+        # self.file_name = input("Введите название файла: ")
 
     def parserCSVforReport(self, parameters):
         """Считывает входной файл, форматирует каждую вакансию и отправляет её на статистический анализ
@@ -75,9 +77,7 @@ class DataSet:
                         fits = False
                         break
                 if fits:
-                    vacancy = {self.heading[i]: line[i] for i in range(len(self.heading)) if
-                               self.heading[i] in ['name', 'salary_from', 'salary_to', 'salary_currency', 'area_name',
-                                                   'published_at']}
+                    vacancy = {self.heading[i]: line[i] for i in range(len(self.heading))}
                     parameters.filtering(vacancy)
 
     def parserCSVforTable(self):
