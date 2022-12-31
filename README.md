@@ -42,10 +42,26 @@
 
 ![](Screenshots/multiProfile.png)
 
-## 3.3.1 Частотность
+## Задание 3.3.1 Частотность
 
 ![](Screenshots/Frequency.jpg)
 
-## 3.3.1 Разделенные новые файлы
+## Задание 3.3.1 Разделенные новые файлы
 
 ![](Screenshots/SplitNewFiles.jpg)
+
+## Задание 3.5.2
+
+![](Screenshots/3.5.2.jpg)
+
+## Задание 3.5.3
+
+![](Screenshots/3.5.3-1.jpg)
+
+![](Screenshots/3.5.3-2.jpg)
+
+![](Screenshots/3.5.3-3.jpg)
+
+![](Screenshots/3.5.3-4.jpg)
+
+![](Screenshots/3.5.3-5.jpg)
