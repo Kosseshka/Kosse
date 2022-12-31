@@ -41,3 +41,11 @@
 ## Задание 3.2.3 Concurrent futures
 
 ![](Screenshots/multiProfile.png)
+
+## 3.3.1 Частотность
+
+![](Screenshots/Frequency.jpg)
+
+## 3.3.1 Разделенные новые файлы
+
+![](Screenshots/SplitNewFiles.jpg)
